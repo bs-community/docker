@@ -1,0 +1,66 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./fpm
+      args:
+        CHANGE_SOURCE: 'true'
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+        DB_HOST: db
+        ENABLE_REDIS: ${ENABLE_REDIS}
+    ports:
+      - 9000:9000
+    volumes:
+      - bs:/app
+      - bs-storage:/app/storage
+    networks:
+      - backend
+    depends_on:
+      - db
+  web:
+    build:
+      context: ./nginx
+    ports:
+      - ${NGINX_PORT}:80
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - bs:/app:ro
+    depends_on:
+      - app
+  db:
+    image: mariadb:10
+    restart: always
+    environment:
+      MYSQL_USER: blessingskin
+      MYSQL_PASSWORD: blessingskin
+      MYSQL_DATABASE: blessingskin
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    ports:
+      - '3306'
+    networks:
+      - backend
+    volumes:
+      - db-data:/var/lib/mysql
+  redis:
+    image: redis:alpine
+    ports:
+      - '6379'
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+    internal: true
+
+volumes:
+  bs:
+    driver: local
+  bs-storage:
+    driver: local
+  db-data:
+    driver: local
