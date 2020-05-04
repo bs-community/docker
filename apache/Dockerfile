@@ -59,7 +59,6 @@ RUN composer dump-autoload -o --no-dev -n && \
     php artisan key:generate && \
     mv .env storage/ && \
     ln -s storage/.env .env && \
-    rm storage/install.lock && \
     touch storage/database.db && \
     mkdir storage/plugins && \
     chown -R www-data:www-data storage public && \
