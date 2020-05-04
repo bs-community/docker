@@ -1,12 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches:
-      - dev
-    paths:
-      - '**/Dockerfile'
-      - 'version.json'
+on: push
 
 jobs:
   build:
