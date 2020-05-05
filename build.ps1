@@ -1,14 +1,16 @@
-if (!(Test-Path source)) {
+if (Test-Path source) {
+    Set-Location source
+    git pull
+    Set-Location ..
+}
+else {
     git clone https://github.com/bs-community/blessing-skin-server.git source --depth=1
 }
 
-Set-Location source
-git pull
-Set-Location ..
-
 $githubToken = if ($env:GITHUB_TOKEN) {
     $env:GITHUB_TOKEN
-} else {
+}
+else {
     't'
 }
 
@@ -31,7 +33,9 @@ docker build `
     --build-arg CHANGE_SOURCE=$env:CHANGE_SOURCE `
     --build-arg GITHUB_TOKEN=$githubToken `
     apache
-Remove-Item apache/source -Recurse
+if ($env:CI -ne 'true') {
+    Remove-Item ./apache/source -Recurse -Force
+}
 
 Copy-Item -Path source -Destination ./fpm -Recurse
 docker build `
@@ -44,4 +48,6 @@ docker build `
     --build-arg CHANGE_SOURCE=$env:CHANGE_SOURCE `
     --build-arg GITHUB_TOKEN=$githubToken `
     fpm
-Remove-Item ./fpm/source -Recurse
+if ($env:CI -ne 'true') {
+    Remove-Item ./fpm/source -Recurse -Force
+}
