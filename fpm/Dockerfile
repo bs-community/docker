@@ -24,7 +24,7 @@ COPY source/resources ./resources/
 COPY source/postcss.config.js source/tsconfig.build.json source/tsconfig.json \
     source/webpack.config.ts source/webpack.meta.config.ts ./
 RUN yarn build && \
-    cp ./resources/assets/src/images/bg.png ./public/app && \
+    cp ./resources/assets/src/images/bg.webp ./public/app && \
     cp ./resources/assets/src/images/favicon.ico ./public/app
 
 
