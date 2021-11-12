@@ -78,10 +78,10 @@ RUN composer dump-autoload -o --no-dev -n && \
     sed "s/DB_PASSWORD=secret/DB_PASSWORD=${DB_PASSWORD}/" -i storage/.env && \
     sed "s/DB_DATABASE=blessingskin/DB_DATABASE=${DB_DATABASE}/" -i storage/.env && \
     if [ ${ENABLE_REDIS} = true ]; then \
-        sed -i 's/REDIS_HOST=127.0.0.1/REDIS_HOST=redis/' /etc/apt/sources.list && \
-        sed -i 's/CACHE_DRIVER=file/CACHE_DRIVER=redis/' /etc/apt/sources.list && \
-        sed -i 's/SESSION_DRIVER=file/SESSION_DRIVER=redis/' /etc/apt/sources.list && \
-        sed -i 's/QUEUE_CONNECTION=sync/QUEUE_CONNECTION=redis/' /etc/apt/sources.list \
+        sed -i 's/REDIS_HOST=127.0.0.1/REDIS_HOST=redis/' storage/.env && \
+        sed -i 's/CACHE_DRIVER=file/CACHE_DRIVER=redis/' storage/.env && \
+        sed -i 's/SESSION_DRIVER=file/SESSION_DRIVER=redis/' storage/.env && \
+        sed -i 's/QUEUE_CONNECTION=sync/QUEUE_CONNECTION=redis/' storage/.env \
     ;fi
 
 VOLUME ["/app", "/app/storage"]
